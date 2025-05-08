@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">vrid-blog-app</string>
+    <string name="blog_api">"https://blog.vrid.in/wp-json/wp/v2/"</string>
 </resources>

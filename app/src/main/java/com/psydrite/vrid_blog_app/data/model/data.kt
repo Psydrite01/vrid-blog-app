@@ -1,4 +1,4 @@
-package com.psydrite.vrid_blog_app
+package com.psydrite.vrid_blog_app.data.model
 
 data class BlogPost(
     val id: Int,
