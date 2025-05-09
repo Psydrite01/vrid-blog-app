@@ -39,6 +39,7 @@ object VridRetrofitInstance {
 
 
 
+
 class BlogRepository {
     suspend fun fetchPosts(page: Int = 1): List<BlogPost> {
         return VridRetrofitInstance.api.getBlogPosts(page = page)

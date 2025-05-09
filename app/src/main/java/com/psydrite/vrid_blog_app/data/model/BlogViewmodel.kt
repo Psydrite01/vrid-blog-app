@@ -6,24 +6,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.psydrite.vrid_blog_app.data.GlobalBlogList
 import com.psydrite.vrid_blog_app.data.api.BlogRepository
 import kotlinx.coroutines.launch
 
 class BlogViewModel : ViewModel() {
-    var blogList by mutableStateOf<List<BlogPost>>(emptyList())
-        private set
-
     var isLoading by mutableStateOf(false)
-        private set
 
     private val repository = BlogRepository()
 
     fun loadPosts(page: Int = 1) {
+        if (page == 1) GlobalBlogList = emptyList()
         viewModelScope.launch {
             isLoading = true
             try {
-                blogList = repository.fetchPosts(page)
-                Log.d("BlogViewModel", "Fetching posts:${blogList.toString()}")
+                GlobalBlogList += repository.fetchPosts(page)
             } catch (e: Exception) {
                 Log.d("BlogViewModel", "err:${e.toString()}}")
             }
