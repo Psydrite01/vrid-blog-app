@@ -1,7 +1,6 @@
 package com.psydrite.vrid_blog_app.ui.screens
 
 import android.os.Build
-import android.text.Layout.Alignment
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -65,7 +64,7 @@ fun BlogList(){
 
         LazyColumn(state = listState) {
             itemsIndexed(GlobalBlogList) { index, blog ->
-                BlogCard(index, blog)
+                BlogCard(blog)
             }
         }
     }

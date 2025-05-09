@@ -6,16 +6,13 @@ data class BlogPost(   //data class for blog post
     val id: Int,
     val title: Rendered,
     var date_gmt: String,
-    val link: String
+    val link: String,
+    @SerializedName("_embedded")
+    val embedded: Embedded
 )
 
 data class Rendered(
     val rendered: String
-)
-
-data class EmbeddedBlogPost(
-    @SerializedName("_embedded")
-    val embedded: Embedded
 )
 
 data class Embedded(

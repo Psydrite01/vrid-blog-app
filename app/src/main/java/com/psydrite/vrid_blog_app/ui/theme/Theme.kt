@@ -16,8 +16,10 @@ private val DarkColorScheme = darkColorScheme(
     secondary = PurpleGrey80,
     tertiary = Pink80,
 
-    background = Color.Black,
-    onBackground = Color.White
+    background = Color.Black,       //main background
+    onBackground = Color.White,     //text
+    surface = Color(0xFF2C2C2E),     //card color
+    onSurface = Color(0xFFE1BEE7),   //date time text on card
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -26,7 +28,9 @@ private val LightColorScheme = lightColorScheme(
     tertiary = Pink40,
 
     background = Color.White,
-    onBackground = Color.Black
+    onBackground = Color.Black,
+    surface = Color(0xFFF2F2F7),
+    onSurface = Color(0xFF8E44AD)
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),

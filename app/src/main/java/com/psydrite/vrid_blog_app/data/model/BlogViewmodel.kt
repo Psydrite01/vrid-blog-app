@@ -34,19 +34,4 @@ class BlogViewModel : ViewModel() {
             }
         }
     }
-
-    fun LoadImage(id: Int, PageUrl : MutableState<String>){
-        var temp by mutableStateOf("")
-        viewModelScope.launch {
-            try {
-                var templist = repository.fetchImage(id).embedded.featuredMedia
-                temp = templist?.get(0)?.sourceUrl.toString()
-            }catch (e: Exception){
-                Log.d("BlogViewModel", "err:${e.toString()}}")
-            }finally {
-                PageUrl.value = temp
-                Log.d("BlogViewModel", "url:${temp}}")
-            }
-        }
-    }
 }
