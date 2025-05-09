@@ -20,12 +20,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.psydrite.vrid_blog_app.data.formatDate
 import com.psydrite.vrid_blog_app.data.model.BlogPost
+import com.psydrite.vrid_blog_app.R
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -69,6 +71,7 @@ fun BlogCard(blog: BlogPost){
                             .crossfade(true)
                             .build(),
                         contentDescription = "Post Image",
+                        placeholder = painterResource(id = R.drawable.loadingplaceholder),
                         modifier = Modifier
                             .width(105.dp)
                             .height(90.dp)
@@ -81,7 +84,7 @@ fun BlogCard(blog: BlogPost){
                 ){
                     Text(
                         blog.title.rendered.toString(),
-                        lineHeight = MaterialTheme.typography.titleMedium.fontSize * 1.3f,
+                        lineHeight = MaterialTheme.typography.titleMedium.fontSize * 1.3f,  //for consistent height across devices
                         fontWeight = FontWeight.SemiBold,
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onBackground)

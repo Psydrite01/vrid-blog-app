@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.psydrite.vrid_blog_app.data.GlobalBlogList
+import com.psydrite.vrid_blog_app.data.isDataFetching
 import com.psydrite.vrid_blog_app.data.model.BlogViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 
@@ -65,6 +66,11 @@ fun BlogList(){
         LazyColumn(state = listState) {
             itemsIndexed(GlobalBlogList) { index, blog ->
                 BlogCard(blog)
+            }
+            if (isDataFetching){
+                item {
+                    DataFetchingComposable()
+                }
             }
         }
     }
