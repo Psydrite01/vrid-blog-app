@@ -1,19 +1,18 @@
 package com.psydrite.vrid_blog_app.data.model
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.psydrite.vrid_blog_app.data.GlobalBlogList
 import com.psydrite.vrid_blog_app.data.LatestPage
 import com.psydrite.vrid_blog_app.data.isDataFetching
 import com.psydrite.vrid_blog_app.data.repository.BlogRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.launch
 
-class BlogViewModel : ViewModel() {
+@HiltViewModel
+class BlogViewModel @Inject constructor(): ViewModel() {
 
     private val repository = BlogRepository()
 

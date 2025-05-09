@@ -29,9 +29,9 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun BlogList(
-    goto_blog_webview: () -> Unit
+    goto_blog_webview: () -> Unit,
+    viewModel: BlogViewModel = viewModel()
 ){
-    var viewModel : BlogViewModel = viewModel()
     val listState = rememberLazyListState()
 
     LaunchedEffect(currentPage) {    // load the data first time on entering
@@ -67,8 +67,15 @@ fun BlogList(
         Spacer(Modifier.height(20.dp))
 
         LazyColumn(state = listState) {
-            itemsIndexed(GlobalBlogList) { index, blog ->
-                BlogCard(blog, goto_blog_webview)
+            if (GlobalBlogList.isEmpty() && !isDataFetching){
+                item {
+                    Text("Oops, No data found")
+                }
+            }
+            else{
+                itemsIndexed(GlobalBlogList) { index, blog ->
+                    BlogCard(blog, goto_blog_webview)
+                }
             }
             if (isDataFetching){
                 item {
