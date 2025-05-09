@@ -50,12 +50,14 @@ fun BlogList(){
     Column (
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp)
+            .padding(vertical = 20.dp, horizontal = 5.dp)
             .background(MaterialTheme.colorScheme.background),
     ){
         Spacer(Modifier.height(50.dp))
         Text(
             "Blog Posts",
+            modifier = Modifier
+                .padding(start = 5.dp),
             fontWeight = FontWeight.SemiBold,
             style = MaterialTheme.typography.headlineLarge,
             color = MaterialTheme.colorScheme.onBackground)

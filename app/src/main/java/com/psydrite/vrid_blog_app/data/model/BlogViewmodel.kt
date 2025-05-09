@@ -1,6 +1,7 @@
 package com.psydrite.vrid_blog_app.data.model
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -34,14 +35,16 @@ class BlogViewModel : ViewModel() {
         }
     }
 
-    fun LoadImage(id: Int) {
+    fun LoadImage(id: Int, PageUrl : MutableState<String>){
         var temp by mutableStateOf("")
         viewModelScope.launch {
             try {
-                temp = repository.fetchImage(id).embedded.featuredMedia.toString()
+                var templist = repository.fetchImage(id).embedded.featuredMedia
+                temp = templist?.get(0)?.sourceUrl.toString()
             }catch (e: Exception){
                 Log.d("BlogViewModel", "err:${e.toString()}}")
             }finally {
+                PageUrl.value = temp
                 Log.d("BlogViewModel", "url:${temp}}")
             }
         }
