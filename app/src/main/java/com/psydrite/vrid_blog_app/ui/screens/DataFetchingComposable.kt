@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -24,14 +25,10 @@ fun DataFetchingComposable(){
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ){
-        Text(
-            "Fetching Data",
-            modifier = Modifier
-        )
         Spacer(Modifier.width(10.dp))
         CircularProgressIndicator(
-            color = Color(0xFFF3D1F4),
-            trackColor = Color(0xFFF3D1F4).copy(0.3f),
+            color = MaterialTheme.colorScheme.onSecondary,
+            trackColor = MaterialTheme.colorScheme.onSecondary.copy(0.3f),
             strokeWidth = 6.dp
         )
     }

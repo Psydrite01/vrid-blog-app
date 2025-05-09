@@ -20,6 +20,7 @@ private val DarkColorScheme = darkColorScheme(
     onBackground = Color.White,     //text
     surface = Color(0xFF2C2C2E),     //card color
     onSurface = Color(0xFFE1BEE7),   //date time text on card
+    onSecondary = Color(0xFFF3D1F4),  //circular progress indicator color
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -30,7 +31,8 @@ private val LightColorScheme = lightColorScheme(
     background = Color.White,
     onBackground = Color.Black,
     surface = Color(0xFFF2F2F7),
-    onSurface = Color(0xFF8E44AD)
+    onSurface = Color(0xFF8E44AD),
+    onSecondary = Color(0xFF9C27B0)
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),

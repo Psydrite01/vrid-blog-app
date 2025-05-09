@@ -2,6 +2,7 @@ package com.psydrite.vrid_blog_app.ui.screens
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,11 +29,14 @@ import coil.request.ImageRequest
 import com.psydrite.vrid_blog_app.data.formatDate
 import com.psydrite.vrid_blog_app.data.model.BlogPost
 import com.psydrite.vrid_blog_app.R
+import com.psydrite.vrid_blog_app.data.currentUrl
 
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun BlogCard(blog: BlogPost){
+fun BlogCard(
+    blog: BlogPost,
+    goto_blog_webview: () -> Unit){
     Row (
         modifier = Modifier
             .fillMaxWidth()
@@ -40,6 +44,12 @@ fun BlogCard(blog: BlogPost){
         Card(
             modifier = Modifier
                 .fillMaxWidth()
+                .clickable(
+                    onClick = {
+                        currentUrl = blog.link
+                        goto_blog_webview()
+                    }
+                )
                 .padding(10.dp),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surface

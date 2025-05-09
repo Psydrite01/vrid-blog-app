@@ -18,7 +18,9 @@ class BlogViewModel : ViewModel() {
     private val repository = BlogRepository()
 
     fun loadPosts(page: Int = 1) {
-        if (page == 1) GlobalBlogList = emptyList()   // clear the list if first page load
+        if (page == 1) {
+            GlobalBlogList = emptyList()   // clear the list if first page load
+        }
         if (LatestPage >= page) return                // return if already loaded
 
         viewModelScope.launch {

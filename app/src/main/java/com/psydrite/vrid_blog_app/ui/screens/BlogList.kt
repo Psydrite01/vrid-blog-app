@@ -21,17 +21,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.psydrite.vrid_blog_app.data.GlobalBlogList
+import com.psydrite.vrid_blog_app.data.currentPage
 import com.psydrite.vrid_blog_app.data.isDataFetching
 import com.psydrite.vrid_blog_app.data.model.BlogViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun BlogList(){
+fun BlogList(
+    goto_blog_webview: () -> Unit
+){
     var viewModel : BlogViewModel = viewModel()
     val listState = rememberLazyListState()
 
-    LaunchedEffect(Unit) {    // load the data first time on entering
+    LaunchedEffect(currentPage) {    // load the data first time on entering
         viewModel.loadPosts(1)
     }
 
@@ -65,7 +68,7 @@ fun BlogList(){
 
         LazyColumn(state = listState) {
             itemsIndexed(GlobalBlogList) { index, blog ->
-                BlogCard(blog)
+                BlogCard(blog, goto_blog_webview)
             }
             if (isDataFetching){
                 item {
