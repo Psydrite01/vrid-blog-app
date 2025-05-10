@@ -45,6 +45,4 @@ A clean and functional blog reader Android application developed using Kotlin an
 
 ## 📷 Screenshots
 
-<!-- Insert screenshots here when available -->
-<!-- ![Home Screen](screenshots/home.png) -->
-<!-- ![Blog View](screenshots/detail.png) -->
+![Home Screen](screenshots/ss1.jpeg)
