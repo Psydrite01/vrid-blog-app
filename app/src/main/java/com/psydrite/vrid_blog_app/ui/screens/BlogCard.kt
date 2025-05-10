@@ -34,7 +34,7 @@ import com.psydrite.vrid_blog_app.data.currentUrl
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun BlogCard(
+fun BlogCard(                            //card for blog post
     blog: BlogPost,
     goto_blog_webview: () -> Unit){
     Row (
@@ -47,7 +47,7 @@ fun BlogCard(
                 .clickable(
                     onClick = {
                         currentUrl = blog.link
-                        goto_blog_webview()
+                        goto_blog_webview()             //web view
                     }
                 )
                 .padding(10.dp),
@@ -69,7 +69,7 @@ fun BlogCard(
                         .padding(vertical = 8.dp)
                 ){
                     Spacer(Modifier.width(8.dp))
-                    AsyncImage(
+                    AsyncImage(                             //using coil
                         model = ImageRequest.Builder(LocalContext.current)
                             .data(blog.embedded.featuredMedia?.get(0)?.sourceUrl.toString())
                             .crossfade(true)

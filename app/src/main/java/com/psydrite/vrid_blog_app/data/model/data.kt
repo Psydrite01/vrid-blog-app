@@ -24,3 +24,10 @@ data class FeaturedMedia(
     @SerializedName("source_url")
     val sourceUrl: String
 )
+
+// for cache
+data class CacheData(
+    val timestamp: Long,
+    val blogPosts: List<BlogPost>,
+    val latestPage: Int
+)

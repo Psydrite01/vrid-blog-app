@@ -13,7 +13,7 @@ object VridRetrofitInstance {
         private set
 
     fun init(context: Context) {
-        val baseUrl = context.getString(R.string.blog_api)
+        val baseUrl = context.getString(R.string.blog_api)       //base url from string.xml
         retrofit = Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())

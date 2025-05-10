@@ -1,9 +1,11 @@
 package com.psydrite.vrid_blog_app.data.model
 
+import android.app.Application
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.psydrite.vrid_blog_app.data.errorMessage
 import com.psydrite.vrid_blog_app.data.repository.BlogRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,13 +13,15 @@ import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.io.File
 
 @HiltViewModel
 class BlogViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val repository: BlogRepository
+    private val repository: BlogRepository,
+    application: Application
 ): ViewModel() {
-
+    // var declarations:
     private val _blogList = MutableStateFlow<List<BlogPost>>(
         savedStateHandle.get<List<BlogPost>>("blog_list") ?: emptyList()
     )
@@ -34,6 +38,7 @@ class BlogViewModel @Inject constructor(
     private val _isDataFetching = MutableStateFlow(false)
     var isDataFetching= _isDataFetching.asStateFlow()
 
+    //functions for blogList:
     private fun updateSavedState(blogList: List<BlogPost>, page: Int) {
         savedStateHandle["blog_list"] = blogList
         savedStateHandle["latest_page"] = page
@@ -42,10 +47,67 @@ class BlogViewModel @Inject constructor(
     fun updateBlogList(newBlogList: List<BlogPost>) {
         _blogList.value = newBlogList
         updateSavedState(newBlogList, latestPage)
+        saveToCache(_blogList.value)
+
     }
     fun addtoBlogList(newBlogList: List<BlogPost>) {
         _blogList.value = _blogList.value + newBlogList
         updateSavedState(_blogList.value, latestPage)
+        saveToCache(_blogList.value)
+    }
+
+    //caching part:
+    private val cacheDirectory = File(application.cacheDir, "blog_cache")
+    private val cacheLifetime = 5 * 60 * 1000 // 5 minutes (for debugging purposes)
+
+    init {
+        //if no cache directory, create
+        if (!cacheDirectory.exists()){
+            cacheDirectory.mkdirs()
+        }
+        //else load data
+        else{
+            loadFromCache()
+        }
+    }
+
+    //caching functions:
+    private fun saveToCache(blogs: List<BlogPost>) {
+        viewModelScope.launch {
+            try {
+                val file = File(cacheDirectory, "blog_cache.json")
+                val data = CacheData(
+                    timestamp = System.currentTimeMillis(),
+                    blogPosts = blogs,
+                    latestPage = latestPage
+                )
+                val json = Gson().toJson(data)
+                file.writeText(json)
+            } catch (e: Exception){
+                Log.e("BlogViewModel", "Error saving to cache", e)
+            }
+        }
+    }
+
+    private fun loadFromCache(){
+        viewModelScope.launch {
+            try {
+                val cacheFile = File(cacheDirectory, "blog_cache.json")
+                if (cacheFile.exists() && cacheFile.isFile){
+                    val json = cacheFile.readText()
+                    val data = Gson().fromJson(json, CacheData::class.java)
+                    if (System.currentTimeMillis() - data.timestamp < cacheLifetime){
+                        updateBlogList(data.blogPosts)   //if not expired, load from cache
+                        latestPage = data.latestPage
+                    }
+                    else{
+                        loadPosts()
+                    }
+                }
+            }catch (e: Exception){
+                Log.e("BlogViewModel", "Error loading from cache", e)
+            }
+        }
     }
 
     fun loadPosts(page: Int = 1) {

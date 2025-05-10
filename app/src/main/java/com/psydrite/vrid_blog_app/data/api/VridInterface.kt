@@ -9,7 +9,7 @@ interface VridInterface {
     suspend fun getBlogPosts(
         @Query("per_page") perPage: Int = 10,
         @Query("page") page: Int = 1,
-        @Query("_embed") embed: Boolean = true
+        @Query("_embed") embed: Boolean = true    //for images
     ): List<BlogPost>
 }
 

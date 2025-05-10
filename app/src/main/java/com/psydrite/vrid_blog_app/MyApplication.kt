@@ -8,6 +8,6 @@ import dagger.hilt.android.HiltAndroidApp
 class MyApplication : Application(){
     override fun onCreate() {
         super.onCreate()
-        VridRetrofitInstance.init(this) // Application context
+        VridRetrofitInstance.init(this)
     }
 }

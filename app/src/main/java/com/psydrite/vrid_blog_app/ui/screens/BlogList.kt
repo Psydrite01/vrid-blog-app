@@ -36,10 +36,6 @@ fun BlogList(
     val isDataFetching = viewModel.isDataFetching.collectAsState()
     val listState = rememberLazyListState()
 
-    LaunchedEffect(currentPage) {    // load the data first time on entering
-        viewModel.loadPosts(1)
-    }
-
     LaunchedEffect(listState) {   // trigger next page load when reaching the end
         snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
             .distinctUntilChanged()
@@ -71,7 +67,7 @@ fun BlogList(
         LazyColumn(state = listState) {
             if (blogList.value.isEmpty() && !isDataFetching.value){
                 item {
-                    Text("Oops, No data found")
+                    ErrorComposable()
                 }
             }
             else{
