@@ -58,7 +58,7 @@ class BlogViewModel @Inject constructor(
 
     //caching part:
     private val cacheDirectory = File(application.cacheDir, "blog_cache")
-    private val cacheLifetime = 5 * 60 * 1000 // 5 minutes (for debugging purposes)
+    private val cacheLifetime = 60 * 60 * 1000 // 1 hr
 
     init {
         //if no cache directory, create
