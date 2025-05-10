@@ -15,12 +15,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.psydrite.vrid_blog_app.data.GlobalBlogList
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.psydrite.vrid_blog_app.data.currentPage
 import com.psydrite.vrid_blog_app.data.isDataFetching
 import com.psydrite.vrid_blog_app.data.model.BlogViewModel
@@ -30,8 +30,9 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 @Composable
 fun BlogList(
     goto_blog_webview: () -> Unit,
-    viewModel: BlogViewModel = viewModel()
+    viewModel: BlogViewModel = hiltViewModel()
 ){
+    val blogList = viewModel.blogList.collectAsState()
     val listState = rememberLazyListState()
 
     LaunchedEffect(currentPage) {    // load the data first time on entering
@@ -43,8 +44,8 @@ fun BlogList(
             .distinctUntilChanged()
             .collect { lastVisibleItemIndex ->
                 if (lastVisibleItemIndex != null) {
-                    if (lastVisibleItemIndex >= GlobalBlogList.lastIndex - 3) {  // -3 so that loading is faster
-                        viewModel.loadPosts(GlobalBlogList.size / 10 + 1)
+                    if (lastVisibleItemIndex >= blogList.value.lastIndex - 3) {  // -3 so that loading is faster
+                        viewModel.loadPosts(blogList.value.size / 10 + 1)
                     }
                 }
             }
@@ -67,13 +68,13 @@ fun BlogList(
         Spacer(Modifier.height(20.dp))
 
         LazyColumn(state = listState) {
-            if (GlobalBlogList.isEmpty() && !isDataFetching){
+            if (blogList.value.isEmpty() && !isDataFetching){
                 item {
                     Text("Oops, No data found")
                 }
             }
             else{
-                itemsIndexed(GlobalBlogList) { index, blog ->
+                itemsIndexed(blogList.value) { index, blog ->
                     BlogCard(blog, goto_blog_webview)
                 }
             }
