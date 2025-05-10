@@ -22,7 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.psydrite.vrid_blog_app.data.currentPage
-import com.psydrite.vrid_blog_app.data.isDataFetching
+import com.psydrite.vrid_blog_app.data.errorMessage
 import com.psydrite.vrid_blog_app.data.model.BlogViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 
@@ -33,6 +33,7 @@ fun BlogList(
     viewModel: BlogViewModel = hiltViewModel()
 ){
     val blogList = viewModel.blogList.collectAsState()
+    val isDataFetching = viewModel.isDataFetching.collectAsState()
     val listState = rememberLazyListState()
 
     LaunchedEffect(currentPage) {    // load the data first time on entering
@@ -68,7 +69,7 @@ fun BlogList(
         Spacer(Modifier.height(20.dp))
 
         LazyColumn(state = listState) {
-            if (blogList.value.isEmpty() && !isDataFetching){
+            if (blogList.value.isEmpty() && !isDataFetching.value){
                 item {
                     Text("Oops, No data found")
                 }
@@ -78,9 +79,14 @@ fun BlogList(
                     BlogCard(blog, goto_blog_webview)
                 }
             }
-            if (isDataFetching){
+            if (isDataFetching.value){
                 item {
                     DataFetchingComposable()
+                }
+            }
+            if (!isDataFetching.value && errorMessage.isNotEmpty()){
+                item {
+                    ErrorComposable()
                 }
             }
         }

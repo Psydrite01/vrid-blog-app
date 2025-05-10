@@ -4,8 +4,7 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.psydrite.vrid_blog_app.data.GlobalBlogList
-import com.psydrite.vrid_blog_app.data.isDataFetching
+import com.psydrite.vrid_blog_app.data.errorMessage
 import com.psydrite.vrid_blog_app.data.repository.BlogRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
@@ -15,45 +14,61 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class BlogViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val repository: BlogRepository
 ): ViewModel() {
-    private val _blogList = MutableStateFlow<List<BlogPost>>(emptyList())
+
+    private val _blogList = MutableStateFlow<List<BlogPost>>(
+        savedStateHandle.get<List<BlogPost>>("blog_list") ?: emptyList()
+    )
     val blogList = _blogList.asStateFlow()
+
+
     var latestPage: Int
         get() = savedStateHandle.get<Int>("latest_page") ?: 0
         set(value) {
             savedStateHandle["latest_page"] = value
         }
 
-    private val repository = BlogRepository()
+
+    private val _isDataFetching = MutableStateFlow(false)
+    var isDataFetching= _isDataFetching.asStateFlow()
+
+    private fun updateSavedState(blogList: List<BlogPost>, page: Int) {
+        savedStateHandle["blog_list"] = blogList
+        savedStateHandle["latest_page"] = page
+    }
 
     fun updateBlogList(newBlogList: List<BlogPost>) {
         _blogList.value = newBlogList
+        updateSavedState(newBlogList, latestPage)
     }
     fun addtoBlogList(newBlogList: List<BlogPost>) {
-        _blogList.value += newBlogList
+        _blogList.value = _blogList.value + newBlogList
+        updateSavedState(_blogList.value, latestPage)
     }
 
     fun loadPosts(page: Int = 1) {
-        if (page == 1) {
-            GlobalBlogList = emptyList()   // clear the list if first page load
-        }
         if (latestPage >= page) return                // return if already loaded
 
+        var templist = emptyList<BlogPost>()
         viewModelScope.launch {
-            isDataFetching = true
+            _isDataFetching.value = true
             try {
-                GlobalBlogList += repository.fetchPosts(page)
+                templist = repository.fetchPosts(page)
             } catch (e: Exception) {
-                Log.d("BlogViewModel", "err:${e.toString()}}")
+                errorMessage = e.message.toString()
             }finally {
-                if (page<=1){
-                    updateBlogList(GlobalBlogList)
-                }else{
-                    addtoBlogList(GlobalBlogList)
+                if (page<=1){   //first page
+                    updateBlogList(templist)
+                }else{     //other pages
+                    addtoBlogList(templist)
                 }
-                latestPage = page
-                isDataFetching = false
+                if (templist.isNotEmpty()){
+                    latestPage = page          //update latest page
+                    errorMessage = ""          //reset var on successful loading
+                }
+                _isDataFetching.value = false
             }
         }
     }

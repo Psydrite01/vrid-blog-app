@@ -64,12 +64,6 @@ fun BlogCard(
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-//                Text(
-//                    (index+1).toString(),
-//                    modifier = Modifier.padding(horizontal = 16.dp),
-//                    fontWeight = FontWeight.SemiBold,
-//                    style = MaterialTheme.typography.headlineMedium,
-//                    color = MaterialTheme.colorScheme.onBackground)
                 Row (
                     modifier = Modifier
                         .padding(vertical = 8.dp)

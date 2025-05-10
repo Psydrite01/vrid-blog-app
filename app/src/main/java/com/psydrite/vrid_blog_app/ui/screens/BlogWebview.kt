@@ -21,9 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.psydrite.vrid_blog_app.data.currentUrl
 
 @Composable
-fun BlogWebview(
-    goto_blog_list: () -> Unit
-){
+fun BlogWebview(){
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -31,29 +29,14 @@ fun BlogWebview(
             .background(MaterialTheme.colorScheme.background),
     ) {
         Spacer(Modifier.height(50.dp))
-        Row (
-            modifier = Modifier,
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            IconButton(
-                onClick = {
-                    goto_blog_list()
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Back"
-                )
-            }
-            Text(
-                "Blog Web view",
-                modifier = Modifier
-                    .padding(start = 5.dp),
-                fontWeight = FontWeight.SemiBold,
-                style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-        }
+        Text(
+            "Blog Web view",
+            modifier = Modifier
+                .padding(start = 5.dp),
+            fontWeight = FontWeight.SemiBold,
+            style = MaterialTheme.typography.headlineLarge,
+            color = MaterialTheme.colorScheme.onBackground
+        )
         Spacer(Modifier.height(20.dp))
         WebPageViewer(currentUrl)
     }

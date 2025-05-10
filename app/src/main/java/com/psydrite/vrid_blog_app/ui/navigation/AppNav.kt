@@ -30,9 +30,7 @@ fun AppNav(
         }
         composable("BlogWebview") {
             currentPage = "BlogWebview"
-            BlogWebview(
-                goto_blog_list = {navController.navigate("BlogList")}
-            )
+            BlogWebview()
         }
     }
 }

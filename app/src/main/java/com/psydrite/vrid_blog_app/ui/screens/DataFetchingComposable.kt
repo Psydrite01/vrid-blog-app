@@ -21,11 +21,11 @@ import androidx.compose.ui.unit.dp
 fun DataFetchingComposable(){
     Row (
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(vertical = 16.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ){
-        Spacer(Modifier.width(10.dp))
         CircularProgressIndicator(
             color = MaterialTheme.colorScheme.onSecondary,
             trackColor = MaterialTheme.colorScheme.onSecondary.copy(0.3f),
